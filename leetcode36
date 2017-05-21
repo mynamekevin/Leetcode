@@ -1,0 +1,24 @@
+// 判断数独9*9格子是否有效，不考虑数独是否能得出结果。
+// 目标就是判断每个位置元素是否在这一行，这一列，这个3*3的九宫格小盒子里面
+// 重点在于怎么存储每个位置的数字所在的行，列，和盒子位置。难点是第12行
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int rowValid[10][10]={0},colValid[10][10]={0},boxValid[10][10]={0};//如果是9*9，第一维最大只能到rowValid[0][8]
+        for(int i=0;i<board.size();i++){
+            for(int j=0;j<board[i].size();j++){
+                if(board[i][j]!='.'){
+                    int num=board[i][j]-'0';                        // num范围在 1~9
+                    if(rowValid[i][num] || colValid[num][j] || boxValid[j/3+i/3*3][num]){ // j/3表示第几列，i/3表示第几行，i/3*3表示所在的box的那一行的上面所有行中有几个box，i/3*3+j/3表示第几个box
+                        return false;
+                    }
+                    rowValid[i][num] = colValid[num][j] = boxValid[j/3+i/3*3][num] = 1;    
+                }
+            }
+        }
+        return true;
+        
+    }
+};
+
+// 不方便写主函数
