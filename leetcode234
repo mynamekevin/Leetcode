@@ -1,0 +1,76 @@
+//
+//  leetcode234.cpp
+//  leetcode
+//
+//  Created by 顾凯文 on 2017/5/21.
+//  Copyright © 2017年 顾凯文. All rights reserved.
+//  本题要求一个链表是否是回文。
+//  思考：如何定义链表节点结构，如何用数组来初始化链表，链表的转置怎么设计，如何找到链表的中间节点
+
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+using namespace std;
+struct ListNode{
+    int val;
+    ListNode* next;
+    ListNode(int x):val(x),next(NULL){}
+};
+
+class Solution {
+    // 4->3->2->1 we use three pointer, remember *pre position before head at the begining
+    ListNode* reverseList(ListNode* head){
+        ListNode* pre=NULL;
+        ListNode* next=NULL;
+        while (head!=NULL) {
+            next = head->next;
+            head->next=pre;
+            pre=head;
+            head=next;
+        }
+        return pre;
+    }
+public:
+    bool isPalindrome(ListNode* head) {
+        if(head==NULL || head->next==NULL)
+            return true;
+        // such as " 1->2->3->2->1 " or "1->2->2->1"
+        // 1->2->3->2<-1(2->null) 1->2->2<-1(2->null)  12344321
+        ListNode* slow=head;
+        ListNode* fast=head;
+        while(fast->next!=NULL && fast->next->next!=NULL){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        // 奇数个时候slow停在中间，偶数个slow停在中间前面那个
+        slow->next = reverseList(slow->next);
+        slow = slow->next;
+        while (slow!=NULL) {
+            if(head->val!=slow->val)
+                return false;
+            head=head->next;
+            slow=slow->next;
+        }
+        return true;
+    }
+};
+
+int main(){
+    int n=0;
+    cin>>n;
+    int init[n];
+    for(int i=0;i<n;i++){
+        cin>>init[i];
+    }
+    ListNode* head = new ListNode(init[0]);
+    ListNode* p = head;
+    for(int i=1;i<n;i++){
+        p->next = new ListNode(init[i]);
+        p = p->next;
+    }
+    Solution s;
+    bool result = s.isPalindrome(head);
+    cout<<result<<endl;
+    delete head;
+    return 0;
+}
