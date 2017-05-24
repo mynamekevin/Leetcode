@@ -1,0 +1,54 @@
+//
+//  leetcode291.cpp
+//  leetcode
+//
+//  Created by 顾凯文 on 2017/5/24.
+//  Copyright © 2017年 顾凯文. All rights reserved.
+//  reverse pairs
+//   Given an array nums, we call (i, j) an important reverse pair ifi < j andnums[i] > 2*nums[j].
+// You need to return the number of important reverse pairs in the given array.
+// 归并排序的经典案例
+
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+using namespace std;
+class Solution {
+public:
+    int reverseP(vector<int> &copy, vector<int> &data, int begin, int end){ //特别注意，copy和data已经调换顺序
+        if(begin==end)
+            return 0;
+        int mid = (begin + end)/2;
+        int right = reverseP(data,copy,begin,mid);
+        int left = reverseP(data,copy,mid+1,end);
+        int i=mid,j=end,tem=end;
+        int count=0;
+        while(i>=begin && j>=mid+1){
+            if(data[i] > 2*data[j]){
+                count += (j-mid);
+                copy[tem--] = data[i--];
+            }else
+                copy[tem--] = data[j--];
+        }
+        while(i>=begin)
+            copy[tem--] = data[i--];
+        while(j>=mid+1)
+            copy[tem--] = data[j--];
+        return count+left+right;
+    }
+    int reversePairs(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        if(nums.size()==1)
+            return 1;
+        vector<int> copy(nums);
+        return reverseP(nums,copy,0,nums.size()-1);
+    }
+};
+int main(){
+    vector<int> input{2,4,3,5,1};
+    Solution* s = new Solution;
+    int output = s->reversePairs(input);
+    cout<<output<<endl;
+    return 0;
+}
