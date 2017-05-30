@@ -1,0 +1,15 @@
+# python
+# 找出最长连续的子串，要求子串中每个字符重复至少K次，注意是子串里面重复次数，不是全部字符串里面重复次数
+# 关键点是发现，小于k次的字符是肯定不会在最长子串里面，所以先找到小于K次的字符，然后划分为左右两个子串。
+# 
+class Solution(object):
+    def longestSubstring(self, s, k):
+        """
+        :type s: str
+        :type k: int
+        :rtype: int
+        """
+        for i in set(s):
+            if(s.count(i)<k):
+                return max(longestSubstring(t,k) for t in s.split(i))
+        return len(s)
