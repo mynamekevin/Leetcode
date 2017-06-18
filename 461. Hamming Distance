@@ -1,0 +1,15 @@
+// 注意：计算整数位上有多少个1的方法
+
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        int yh = x^y;
+        int count = 0;
+        while(yh){
+            ++count;
+            yh = yh&(yh-1);
+        }
+        return count;
+    }
+};
+
