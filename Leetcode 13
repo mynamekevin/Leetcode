@@ -1,0 +1,35 @@
+//
+//  leetcode13.cpp
+//  leetcode_2qi
+//
+//  Created by 顾凯文 on 2017/7/2.
+//  Copyright © 2017年 顾凯文. All rights reserved.
+// 大的在小的前面则做加法，相等做加法，
+// 小的在大的前面则减法，
+// 连写的数字不超过三次（准确说是，前后相等时候不超过三次，或大的在小的前面，小的不能超过三次，小的在大的前面，小的只能出现一次
+// 数字上面画一个横线，这个数扩大100倍
+#include <stdio.h>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+using namespace std;
+class Solution{
+public:
+    int romanToInt(string s){
+        if(s=="")
+        return 0;
+        unordered_map<char, int> T={{'I',1},{'V',5},{'X',10},{'L',50},{'C',100},{'D',500},{'M',1000}};
+        int temp = T[s.back()];
+        for(int i=s.length()-2;i>=0;--i){ //没有做数字异常情况，比如非法字符，字符超过三次，字符越界等情况
+            if(T[s[i]] < T[s[i+1]])
+            temp -= T[s[i]];
+            else
+            temp += T[s[i]];
+        }
+        return temp;
+    }
+};
+int main(){
+    Solution s;
+    cout<<s.romanToInt("DCXXI")<<endl;
+}
